@@ -55,22 +55,21 @@ fn spawn_player(
             parent.spawn((
                 Name::new("PlayerBody"),
                 PlayerBody,
-                CollisionEventsEnabled,
                 Collider::cuboid(1.75*scale.x, 2.8*scale.y, 1.0*scale.z),
+                CollisionEventsEnabled,
             ))
                 .with_child((
                 SceneRoot(ass.load("character.glb#Scene0")),
                 Transform::from_scale(scale)
                     .with_translation(Vec3::new(0.0, -1.4*scale.y, 0.0))
-            ));
+            )).observe(on_ground_collision);
 
             parent.spawn((
                 Name::new("PlayerCamera"),
                 Camera3d::default(),
                 Transform::from_xyz(0.0, 2.0, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
             ));
-        })
-        .observe(on_ground_collision);
+        });
 }
 
 
@@ -149,11 +148,10 @@ fn move_player(
 /////////////////////////////////////////
 fn on_ground_collision(
     event: On<CollisionStart>,
-    mut player_query: Query<&mut Movement, With<Player>>,
     ground_query: Query<&Ground>,
+    mut player: Single<&mut Movement, With<Player>>,
 ) {
-    if ground_query.get(event.collider2).is_ok() &&
-       let Ok(mut player) = player_query.get_mut(event.collider1)
+    if ground_query.get(event.collider2).is_ok()
     {
         player.is_grounded = true;
     }
