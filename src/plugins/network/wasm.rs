@@ -2,7 +2,7 @@
 ///////////////////////// wasm ////////////////////////
 ///////////////////////////////////////////////////////
 
-use crate::network::resource::{WSMessages, WSMessageChannels, LobbyInfo};
+use super::resource::{WSMessages, WSMessageChannels, LobbyInfo};
 use bevy::prelude::*;
 use futures_util::{SinkExt, StreamExt};
 use std::collections::HashMap;
@@ -29,7 +29,7 @@ pub fn connect_multiplayer(
         outgoing: to_others_tx,
     });
  
-    commands.init_resource::<resource::LobbyInfo>();
+    commands.init_resource::<LobbyInfo>();
 }
 
 fn spawn_ws_tasks(
