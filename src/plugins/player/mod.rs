@@ -10,12 +10,13 @@ use crate::components::entities::PlayerBody;
 use crate::components::vitals::Movement;
 use crate::components::objects::Ground;
 use crate::plugins::network::synchronizer::Synchronizer;
+use animation::animate_meshes;
+use animation::load_animation;
 use avian3d::prelude::*;
 use bevy::prelude::*;
 
 use camera::move_camera;
 use camera::setup_camera;
-use animation::load_animation;
 use bundle::SimplePlayerBundle;
 
 const GLTF_PATH: &str = "character.glb";
@@ -37,6 +38,7 @@ impl Plugin for PlayerPlugin {
         ))
         .add_systems(Update, 
         (
+            animate_meshes,
             move_player, 
             move_camera
         ));
@@ -51,7 +53,7 @@ impl Plugin for PlayerPlugin {
 /////////////////////////////////
 fn spawn_player(
     mut commands: Commands,
-    ass: Res<AssetServer>
+    ass: Res<AssetServer>,
 ) {
     let scale= Vec3::splat(0.3);
 
